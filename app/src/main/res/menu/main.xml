@@ -3,8 +3,10 @@
 
     <item
         android:id="@+id/registration"
-        android:title="Registration" />
+        android:title="Registration"
+        android:orderInCategory="100"/>
     <item
         android:id="@+id/uploadgallery"
-        android:title="Upload from gallery" />
+        android:title="Upload from gallery"
+        android:orderInCategory="200"/>
 </menu>

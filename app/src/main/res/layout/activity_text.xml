@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".Text">
 
     <Space
         android:layout_width="0dp"
@@ -23,13 +23,13 @@
             android:layout_weight="10" />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/editTextTextPersonName"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
             android:ems="10"
-            android:hint="EMAIL"
-            android:inputType="textEmailAddress" />
+            android:hint="TITLE"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"
@@ -37,13 +37,14 @@
             android:layout_weight="10" />
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/editTextTextMultiLine"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="40"
             android:ems="10"
-            android:hint="PASSWORD"
-            android:inputType="textPassword" />
+            android:gravity="start|top"
+            android:hint="TEXT"
+            android:inputType="textMultiLine" />
 
         <Space
             android:layout_width="match_parent"
@@ -51,20 +52,11 @@
             android:layout_weight="10" />
 
         <Button
-            android:id="@+id/btn"
+            android:id="@+id/button4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:onClick="register"
-            android:text="REGISTER" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:onClick="toGallery"
-            android:text="uploud from gallery" />
+            android:text="UPLOAD" />
 
         <Space
             android:layout_width="match_parent"
@@ -76,4 +68,5 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="10" />
+
 </LinearLayout>

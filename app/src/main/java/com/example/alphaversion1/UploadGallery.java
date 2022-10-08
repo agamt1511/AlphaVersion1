@@ -76,19 +76,5 @@ public class UploadGallery extends AppCompatActivity {
         Toast.makeText(UploadGallery.this, "The picture has been uploaded", Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id==R.id.registration){
-            Intent si = new Intent(this,MainActivity.class);
-            startActivity(si);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

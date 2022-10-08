@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".TakingPhoto">
 
     <Space
         android:layout_width="0dp"
@@ -22,28 +22,12 @@
             android:layout_height="0dp"
             android:layout_weight="10" />
 
-        <EditText
-            android:id="@+id/email"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="EMAIL"
-            android:inputType="textEmailAddress" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="PASSWORD"
-            android:inputType="textPassword" />
+            android:layout_weight="40"
+            app:srcCompat="@drawable/ic_launcher_background" />
 
         <Space
             android:layout_width="match_parent"
@@ -51,20 +35,23 @@
             android:layout_weight="10" />
 
         <Button
-            android:id="@+id/btn"
+            android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:onClick="register"
-            android:text="REGISTER" />
+            android:text="upload" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:onClick="toGallery"
-            android:text="uploud from gallery" />
+            android:text="to shoot" />
 
         <Space
             android:layout_width="match_parent"

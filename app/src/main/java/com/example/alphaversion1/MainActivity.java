@@ -62,19 +62,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id==R.id.uploadgallery){
-            Intent si = new Intent(this,UploadGallery.class);
-            startActivity(si);
-        }
-        return super.onOptionsItemSelected(item);
+    public void toGallery(View view) {
+        Intent si = new Intent(this,TakingPhoto.class);
+        startActivity(si);
     }
 }

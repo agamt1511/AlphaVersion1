@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toGallery(View view) {
-        Intent si = new Intent(this,TakingPhoto.class);
+        Intent si = new Intent(this,UploadGallery.class);
         startActivity(si);
     }
 }

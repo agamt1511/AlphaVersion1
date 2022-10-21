@@ -39,7 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
-            android:onClick="pickAnImage"
             android:text="Select a photo from the gallery" />
 
         <Space

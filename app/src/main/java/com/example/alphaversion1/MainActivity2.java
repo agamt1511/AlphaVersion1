@@ -1,8 +1,5 @@
 package com.example.alphaversion1;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,12 +8,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.util.UUID;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -26,6 +30,10 @@ public class MainActivity2 extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageReference;
     Uri selectedImageUri;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    DatabaseReference getImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +85,7 @@ public class MainActivity2 extends AppCompatActivity {
                     // update the preview image in the layout
                     iv2.setImageURI(selectedImageUri);
                     uploadImage();
+                    retrieveImage();
                 }
             }
         }
@@ -106,4 +115,22 @@ public class MainActivity2 extends AppCompatActivity {
                     });
         }
     }
+
+    void retrieveImage() {
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+
+// Create a reference with an initial file path and name
+        StorageReference pathReference = storageRef.child("images/stars.jpg");
+
+// Create a reference to a file from a Google Cloud Storage URI
+        StorageReference gsReference = storage.getReferenceFromUrl("gs://bucket/images/stars.jpg");
+
+// Create a reference from an HTTPS URL
+// Note that in the URL, characters are URL escaped!
+        StorageReference httpsReference = storage.getReferenceFromUrl("https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg")
+    }
 }
+
+
+

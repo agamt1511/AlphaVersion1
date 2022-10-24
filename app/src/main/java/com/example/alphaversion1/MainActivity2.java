@@ -33,6 +33,8 @@ public class MainActivity2 extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     DatabaseReference getImage;
+    StorageReference ref;
+    String name;
 
 
     @Override
@@ -83,7 +85,6 @@ public class MainActivity2 extends AppCompatActivity {
                 selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
-                    iv2.setImageURI(selectedImageUri);
                     uploadImage();
                     retrieveImage();
                 }
@@ -95,7 +96,8 @@ public class MainActivity2 extends AppCompatActivity {
         if (selectedImageUri != null) {
 
             // Defining the child of storageReference
-            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+            name = "images/" + UUID.randomUUID().toString();
+            ref = storageReference.child(name);
 
             // adding listeners on upload
             // or failure of image
@@ -117,18 +119,21 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     void retrieveImage() {
-        // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
 
-// Create a reference with an initial file path and name
-        StorageReference pathReference = storageRef.child("images/stars.jpg");
+        StorageReference pathReference = storageRef.child(name);
 
-// Create a reference to a file from a Google Cloud Storage URI
-        StorageReference gsReference = storage.getReferenceFromUrl("gs://bucket/images/stars.jpg");
+        // Reference to an image file in Cloud Storage
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-// Create a reference from an HTTPS URL
-// Note that in the URL, characters are URL escaped!
-        StorageReference httpsReference = storage.getReferenceFromUrl("https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg")
+        // ImageView in your Activity
+        ImageView imageView = findViewById(R.id.imageView);
+
+        // Download directly from StorageReference using Glide
+        // (See MyAppGlideModule for Loader registration)
+        Glide.with(thi)
+                .load(storageReference)
+                .into(imageView);
     }
 }
 

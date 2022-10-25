@@ -1,8 +1,11 @@
 package com.example.alphaversion1;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -96,7 +99,7 @@ public class MainActivity2 extends AppCompatActivity {
         if (selectedImageUri != null) {
 
             // Defining the child of storageReference
-            name = "images/" + UUID.randomUUID().toString();
+            name = "images/albert.jpg";
             ref = storageReference.child(name);
 
             // adding listeners on upload
@@ -119,21 +122,27 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     void retrieveImage() {
-        StorageReference storageRef = storage.getReference();
+        StorageReference mImageRef =
+                FirebaseStorage.getInstance().getReference("image/albert.jpg");
+        final long ONE_MEGABYTE = 1024 * 1024;
+        mImageRef.getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        DisplayMetrics dm = new DisplayMetrics();
+                        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        StorageReference pathReference = storageRef.child(name);
-
-        // Reference to an image file in Cloud Storage
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-
-        // ImageView in your Activity
-        ImageView imageView = findViewById(R.id.imageView);
-
-        // Download directly from StorageReference using Glide
-        // (See MyAppGlideModule for Loader registration)
-        Glide.with(thi)
-                .load(storageReference)
-                .into(imageView);
+                        iv2.setMinimumHeight(dm.heightPixels);
+                        iv2.setMinimumWidth(dm.widthPixels);
+                        iv2.setImageBitmap(bm);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
     }
 }
 

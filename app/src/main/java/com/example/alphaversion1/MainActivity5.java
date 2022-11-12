@@ -2,53 +2,51 @@ package com.example.alphaversion1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TableLayout;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-public class MainActivity4 extends AppCompatActivity {
-    String st_tit, st_txt, name;
-
-    byte[] txt_byte;
+public class MainActivity5 extends AppCompatActivity{
+    String[] organs = new String[20];
 
     Intent si;
 
-    EditText tit, txt;
-
-    StorageReference ref;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main4);
+        setContentView(R.layout.activity_main5);
 
-        tit = (EditText) findViewById(R.id.tit);
-        txt = (EditText) findViewById(R.id.txt);
+
+        for (int i = 1; i < 20; i++) {
+            organs[i] = "";
+        }
+
+        lv = (ListView) findViewById(R.id.lv);
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,organs);
+        lv.setAdapter(adp);
     }
 
-    public void upload(View view) {
-        st_tit = tit.getText().toString();
-        st_txt = txt.getText().toString();
-
-        txt_upload();
+    public void toChangeValue(View view) {
+        organs[5] = "YES";
     }
-
-    private void txt_upload() {
-        name = "txt/"+st_tit+".txt";
-        ref = FirebaseStorage.getInstance().getReference().child(name);
-        txt_byte = st_txt.getBytes();
-        ref.putBytes(txt_byte);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,8 +69,8 @@ public class MainActivity4 extends AppCompatActivity {
             si = new Intent(this, MainActivity3.class);
             startActivity(si);
         }
-        if (id==R.id.activity5){
-            si = new Intent(this, MainActivity5.class);
+        if (id==R.id.activity4){
+            si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
         if (id==R.id.activity6){

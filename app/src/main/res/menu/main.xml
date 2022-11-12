@@ -2,16 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/activity1"
+        android:id="@+id/activity"
         android:title="Registration"
         android:orderInCategory="100"/>
     <item
         android:id="@+id/activity2"
-        android:title="Upload from gallery"
+        android:title="Upload From Gallery"
         android:orderInCategory="200"/>
 
     <item
         android:id="@+id/activity3"
-        android:title="Registration"
-        android:orderInCategory="100"/>
+        android:title="Notifications"
+        android:orderInCategory="300"/>
+
+    <item
+        android:id="@+id/activity4"
+        android:title="Upload A Text"
+        android:orderInCategory="400"/>
+
+    <item
+        android:id="@+id/activity5"
+        android:title="Table"
+        android:orderInCategory="500"/>
+
+    <item
+        android:id="@+id/activity6"
+        android:title="Upload From Camera"
+        android:orderInCategory="600"/>
+
 </menu>

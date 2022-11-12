@@ -20,8 +20,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private EditText email, password;
+    String addEmail, addPassword;
+
+    Intent si;
+
+    EditText email, password;
+
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void register(View view) {
-        String addEmail = email.getText().toString().trim();
-        String addPassword = password.getText().toString().trim();
+        addEmail = email.getText().toString().trim();
+        addPassword = password.getText().toString().trim();
 
         mAuth.createUserWithEmailAndPassword(addEmail,addPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -46,24 +51,41 @@ public class MainActivity extends AppCompatActivity {
 
                     FirebaseDatabase.getInstance().getReference("User")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_LONG).show();
-                                    }
-                                    else {
-                                        Toast.makeText(MainActivity.this, "User not added", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
+                            .setValue(user);
                 }
             }
         });
     }
 
-    public void toGallery(View view) {
-        Intent si = new Intent(this,UploadGallery.class);
-        startActivity(si);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id==R.id.activity2){
+            si = new Intent(this, MainActivity2.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity3){
+            si = new Intent(this, MainActivity3.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity4){
+            si = new Intent(this, MainActivity4.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity5){
+            si = new Intent(this, MainActivity5.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity6){
+            si = new Intent(this, MainActivity6.class);
+            startActivity(si);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

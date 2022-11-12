@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UploadGallery">
+    tools:context=".MainActivity5">
 
     <Space
         android:layout_width="0dp"
@@ -20,31 +20,33 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20" />
+            android:layout_weight="10" />
 
-        <ImageView
-            android:id="@+id/iv"
+        <ListView
+            android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_weight="50">
+
+        </ListView>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20" />
+            android:layout_weight="10" />
 
         <Button
-            android:id="@+id/btn1"
+            android:id="@+id/changeValue"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
-            android:text="Select a photo from the gallery" />
+            android:onClick="toChangeValue"
+            android:text="Button" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20" />
+            android:layout_weight="10" />
     </LinearLayout>
 
     <Space

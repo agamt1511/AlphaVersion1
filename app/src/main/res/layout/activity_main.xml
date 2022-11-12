@@ -26,7 +26,7 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="20"
             android:ems="10"
             android:hint="EMAIL"
             android:inputType="textEmailAddress" />
@@ -40,7 +40,7 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="20"
             android:ems="10"
             android:hint="PASSWORD"
             android:inputType="textPassword" />
@@ -54,17 +54,9 @@
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="20"
             android:onClick="register"
             android:text="REGISTER" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:onClick="toGallery"
-            android:text="uploud from gallery" />
 
         <Space
             android:layout_width="match_parent"

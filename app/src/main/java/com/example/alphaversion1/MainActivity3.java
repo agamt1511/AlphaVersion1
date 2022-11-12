@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.content.BroadcastReceiver;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.AlarmManager;
@@ -20,7 +21,7 @@ import android.view.View;
 import android.widget.TimePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-
+import android.widget.Toast;
 import java.util.Calendar;
 
 
@@ -36,38 +37,11 @@ public class MainActivity3 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
-        si = new Intent(this,MainActivity3.class);
 
         et1 = findViewById(R.id.et1);
-        start();
     }
 
-    private void start() {
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.main, menu);
-            return super.onCreateOptionsMenu(menu);
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(@NonNull MenuItem item){
-            int id = item.getItemId();
-            if (id == R.id.activity1) {
-                si = new Intent(this,MainActivity.class);
-            }
-            if (id == R.id.activity2) {
-                si = new Intent(this,MainActivity2.class);
-            }
-            if (id == R.id.activity3) {
-                si = new Intent(this,MainActivity3.class);
-            }
-            return super.onOptionsItemSelected(item);
-            startActivity(si);
-        }
-    }
-
-    public void CreateNotify_NoTimer (View view){
-        startActivity(si);
+    public void CreateNotify_NoTimer() {
         String st1 = et1.getText().toString();
         createNotificationChannel();
 
@@ -82,30 +56,6 @@ public class MainActivity3 extends AppCompatActivity {
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(100, builder.build());
 
-    }
-
-    public void CreateNotify_WithTimer (){
-        createNotificationChannel();
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CHANNEL_ID")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Notify_WithTimer")
-                .setContentText("Good Job")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(100, builder.build());
-    }
-
-    public void SetTimer () {
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
-                CreateNotify_WithTimer();
-            }
-        });
     }
 
     private void createNotificationChannel() {
@@ -124,5 +74,35 @@ public class MainActivity3 extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id==R.id.activity){
+            si = new Intent(this, MainActivity.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity2){
+            si = new Intent(this, MainActivity2.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity4){
+            si = new Intent(this, MainActivity4.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity5){
+            si = new Intent(this, MainActivity5.class);
+            startActivity(si);
+        }
+        if (id==R.id.activity6){
+            si = new Intent(this, MainActivity6.class);
+            startActivity(si);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

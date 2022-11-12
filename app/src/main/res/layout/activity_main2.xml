@@ -23,11 +23,11 @@
             android:layout_weight="10" />
 
         <ImageView
-            android:id="@+id/iv2"
+            android:id="@+id/image_gallery"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="50"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal_background" />
 
         <Space
             android:layout_width="match_parent"
@@ -35,11 +35,11 @@
             android:layout_weight="10" />
 
         <Button
-            android:id="@+id/btn2"
+            android:id="@+id/btn_gallery"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
-            android:text="Button" />
+            android:text="Upload From Gallery" />
 
         <Space
             android:layout_width="match_parent"

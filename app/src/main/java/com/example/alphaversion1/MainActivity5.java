@@ -27,7 +27,7 @@ public class MainActivity5 extends AppCompatActivity {
     String[] organs2 = new String[20];
 
     Intent si;
-    ArrayAdapter<String> adp, adp1;
+    ArrayAdapter<String> adp;
     ListView lv;
 
     @Override
@@ -79,13 +79,13 @@ public class MainActivity5 extends AppCompatActivity {
 
     public void changeValue(View view) {
         for (int i = 0; i < 20; i++) {
-            organs2[i] = "";
+            organs[i] = "";
             if (i == 4){
-                organs2[i] = "HEY";
+                organs[i] = "HEY";
             }
         }
 
-        adp1 = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, organs2);
-        lv.setAdapter(adp1);
+        adp = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, organs);
+        lv.setAdapter(adp);
     }
 }

@@ -23,7 +23,7 @@
             android:layout_weight="10" />
 
         <ImageView
-            android:id="@+id/click_image"
+            android:id="@+id/taken"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="40"
@@ -38,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:onClick="uploadImage"
             android:text="upload" />
 
         <Space
@@ -51,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
+            android:onClick="takePhoto"
             android:text="to shoot" />
 
         <Space

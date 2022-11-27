@@ -18,31 +18,51 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 
 public class MainActivity3 extends AppCompatActivity {
     EditText et1;
-    TimePicker timePicker;
-    private AlarmManager alarmMgr;
-    private PendingIntent alarmIntent;
-    TimePickerDialog timePickerDialouge;
+    PendingIntent pendingIntent;
     Intent si;
+    String st1;
+    Button notifyNo_btn, notifyYes_btn;
+    MaterialTimePicker picker;
+    boolean timePicked;
+    AlarmManager alarmManager;
+    Calendar calendar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
 
-        et1 = findViewById(R.id.et1);
+        et1 = (EditText) findViewById(R.id.et1);
+        notifyNo_btn = (Button) findViewById(R.id.notifyNo_btn);
+        notifyYes_btn = (Button) findViewById(R.id.notifyYes_btn);
+
+        notifyNo_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreateNotify_NoTimer();
+            }
+        });
     }
 
     public void CreateNotify_NoTimer() {
-        String st1 = et1.getText().toString();
+        st1 = et1.getText().toString();
         createNotificationChannel();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CHANNEL_ID")
@@ -51,12 +71,42 @@ public class MainActivity3 extends AppCompatActivity {
                 .setContentText(st1)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity3.this);
 
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(100, builder.build());
 
     }
+
+    public void openTimePicker(View view) {
+        // instance of our calendar.
+        final Calendar c = Calendar.getInstance();
+
+        // getting our hour, minute.
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        // initializing our Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity3.this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        Intent intent = new Intent(MainActivity3.this, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity3.this, 0, intent, 0);
+                        Calendar time = Calendar.getInstance();
+                        time.setTimeInMillis(System.currentTimeMillis());
+                        time.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        time.set(Calendar.MINUTE, minute);
+                        time.set(Calendar.SECOND, 0);
+                        alarmMgr.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), pendingIntent);
+                    }
+                }, hour, minute, true);
+        // display our time picker dialog.
+        timePickerDialog.show();
+    }
+
+
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -100,7 +150,7 @@ public class MainActivity3 extends AppCompatActivity {
             startActivity(si);
         }
         if (id==R.id.activity6){
-            si = new Intent(this, MainActivity6.class);
+            si = new Intent(this, MainActivity7.class);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);

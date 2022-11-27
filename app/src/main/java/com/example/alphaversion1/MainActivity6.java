@@ -1,42 +1,37 @@
 package com.example.alphaversion1;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity6 extends AppCompatActivity {
 
-    // Define the pic id
-    private static final int pic_id = 123;
-
-    String name;
-
-    Uri selectedImageUri;
+    String currentPhotoPath;
+    int CAMERA_PERM_CODE, CAMERA_REQUEST_CODE;
+    ImageView iv;
 
     Intent si;
-
-    // Define the button and imageview type variable
-    Button camera_open_id;
-    ImageView click_image_id;
-
-    StorageReference storageReference, ref;
 
 
     @Override
@@ -44,49 +39,86 @@ public class MainActivity6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main6);
 
-        // By ID we can get each component which id is assigned in XML file get Buttons and imageview.
-        camera_open_id = findViewById(R.id.camera_button);
-        click_image_id = findViewById(R.id.click_image);
+        CAMERA_PERM_CODE = 101;
+        CAMERA_REQUEST_CODE = 102;
+        iv = findViewById(R.id.taken);
 
-//        // Camera_open button is for open the camera and add the setOnClickListener in this button
-//        camera_open_id.setOnClickListener(v -> {
-//            // Create the camera_intent ACTION_IMAGE_CAPTURE it will open the camera for capture the image
-//            Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            // Start the activity with camera_intent, and request pic id
-//            startActivityForResult(camera_intent, pic_id);
-//        });
     }
 
-//    // This method will help to retrieve the image
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // Match the request 'pic id with requestCode
-//        if (requestCode == pic_id) {
-//            // BitMap is data structure of image file which store the image in memory
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            // Set the image in imageview for display
-//            click_image_id.setImageBitmap(photo);
-//            selectedImageUri = data.getData();
-//        }
-//    }
+    public void takePhoto (View view){
+        askCameraPermissions();
+    }
 
-    void uploadImage() {
-        if (selectedImageUri != null) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST_CODE)
+        {
 
-            // Defining the child of storageReference
-            name = "images/albert.jpg";
-            ref = storageReference.child(name);
+            if(resultCode == Activity.RESULT_OK){
 
-            // adding listeners on upload
-            // or failure of image
-            ref.putFile(selectedImageUri);
+                File f = new File(currentPhotoPath);
+                iv.setImageURI(Uri.fromFile(f));
+            }
+        }
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd__HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFL = File.createTempFile(
+                imageFileName, /* prefix */
+                " .jpg",       /* suffix */
+                storageDir     /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = imageFL.getAbsolutePath();
+        return imageFL;
+    }
+
+    private void dispatchTakePictureIntent(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null){
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex){
+                //Error occurred while creating the File
+
+            }
+            if (photoFile!= null){
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.lifesworkiguess.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+    }
+
+    private void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+        }
+        else{
+            dispatchTakePictureIntent();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            dispatchTakePictureIntent();
+        } else {
+            Toast.makeText(this, "Camera Permission is required to use the camera!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

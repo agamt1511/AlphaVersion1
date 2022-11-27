@@ -1,11 +1,22 @@
 package com.example.alphaversion1;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,18 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -32,39 +32,43 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity7 extends AppCompatActivity {
     int SELECT_PICTURE = 200;
     String name;
 
     Uri selectedImageUri;
 
     Intent si;
+    int CAMERA_PERM_CODE, CAMERA_REQUEST_CODE;
 
-    Button btn_gallery;
-    ImageView image_gallery;
+    ImageView imageView;
+    Button camera_button;
 
     FirebaseStorage storage;
     StorageReference storageReference, ref, copyref;
 
     boolean flag = false;
 
-    private ArrayList<String> urlList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main7);
 
-        btn_gallery = (Button) findViewById(R.id.btn_gallery);
-        image_gallery = (ImageView) findViewById(R.id.image_gallery);
+        CAMERA_PERM_CODE = 101;
+        CAMERA_REQUEST_CODE = 102;
+
+        camera_button = (Button) findViewById(R.id.camera_button);
+        imageView = (ImageView) findViewById(R.id.taken);
 
         // handle the Choose Image button to trigger the image chooser function
-        btn_gallery.setOnClickListener(new View.OnClickListener() {
+        camera_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageChooser();
+                askCameraPermissions();
             }
         });
 
@@ -75,10 +79,12 @@ public class MainActivity2 extends AppCompatActivity {
 
     private void imageChooser() {
         Intent i = new Intent();
-        i.setType("image/*");
-        i.setAction(Intent.ACTION_GET_CONTENT);
+        i.setType("image/jpeg");
+        i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+        startActivity(Intent.createChooser(i, "Select Picture"));
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -87,6 +93,26 @@ public class MainActivity2 extends AppCompatActivity {
             selectedImageUri = data.getData();
             uploadImage();
             loadFile();
+        }
+    }
+
+    private void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+        }
+        else{
+            imageChooser();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            imageChooser();
+        } else {
+            Toast.makeText(this, "Camera Permission is required to use the camera!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -113,13 +139,26 @@ public class MainActivity2 extends AppCompatActivity {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap bitmap = BitmapFactory.decodeFile(local_file.getAbsolutePath());
-                    image_gallery.setImageBitmap(bitmap);
+                    imageView.setImageBitmap(bitmap);
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
@@ -131,29 +170,26 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id==R.id.activity){
+        if (id == R.id.activity) {
             si = new Intent(this, MainActivity.class);
             startActivity(si);
         }
-        if (id==R.id.activity3){
+        if (id == R.id.activity2) {
+            si = new Intent(this, MainActivity2.class);
+            startActivity(si);
+        }
+        if (id == R.id.activity3) {
             si = new Intent(this, MainActivity3.class);
             startActivity(si);
         }
-        if (id==R.id.activity4){
+        if (id == R.id.activity4) {
             si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
-        if (id==R.id.activity5){
+        if (id == R.id.activity5) {
             si = new Intent(this, MainActivity5.class);
-            startActivity(si);
-        }
-        if (id==R.id.activity6){
-            si = new Intent(this, MainActivity7.class);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);
     }
 }
-
-
-

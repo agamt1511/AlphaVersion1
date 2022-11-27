@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity3">
+    tools:context=".MainActivity7">
 
     <Space
         android:layout_width="0dp"
@@ -22,14 +22,12 @@
             android:layout_height="0dp"
             android:layout_weight="10" />
 
-        <EditText
-            android:id="@+id/et1"
+        <ImageView
+            android:id="@+id/taken"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="notification"
-            android:inputType="textPersonName" />
+            android:layout_weight="40"
+            app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal_background" />
 
         <Space
             android:layout_width="match_parent"
@@ -37,11 +35,10 @@
             android:layout_weight="10" />
 
         <Button
-            android:id="@+id/notifyNo_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:text="create Notify" />
+            android:text="upload" />
 
         <Space
             android:layout_width="match_parent"
@@ -49,30 +46,17 @@
             android:layout_weight="10" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/camera_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:onClick="openTimePicker"
-            android:text="timePick" />
+            android:onClick="takePhoto"
+            android:text="to shoot" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10" />
-
-        <Button
-            android:id="@+id/notifyYes_btn"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:text="Schedule Notification" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="20" />
-
     </LinearLayout>
 
     <Space

@@ -36,11 +36,10 @@
             android:layout_weight="10" />
 
         <Button
-            android:id="@+id/changeValue"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
-            android:onClick="toChangeValue"
+            android:onClick="changeValue"
             android:text="Button" />
 
         <Space

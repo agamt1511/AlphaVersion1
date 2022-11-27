@@ -22,30 +22,27 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainActivity5 extends AppCompatActivity{
+public class MainActivity5 extends AppCompatActivity {
     String[] organs = new String[20];
+    String[] organs2 = new String[20];
 
     Intent si;
-
+    ArrayAdapter<String> adp, adp1;
     ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main5);
+        lv = (ListView) findViewById(R.id.lv);
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-
-        for (int i = 1; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             organs[i] = "";
         }
 
-        lv = (ListView) findViewById(R.id.lv);
-        ArrayAdapter<String> adp = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,organs);
+        adp = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, organs);
         lv.setAdapter(adp);
-    }
-
-    public void toChangeValue(View view) {
-        organs[5] = "YES";
     }
 
     @Override
@@ -57,26 +54,38 @@ public class MainActivity5 extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id==R.id.activity){
+        if (id == R.id.activity) {
             si = new Intent(this, MainActivity.class);
             startActivity(si);
         }
-        if (id==R.id.activity2){
+        if (id == R.id.activity2) {
             si = new Intent(this, MainActivity2.class);
             startActivity(si);
         }
-        if (id==R.id.activity3){
+        if (id == R.id.activity3) {
             si = new Intent(this, MainActivity3.class);
             startActivity(si);
         }
-        if (id==R.id.activity4){
+        if (id == R.id.activity4) {
             si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
-        if (id==R.id.activity6){
+        if (id == R.id.activity6) {
             si = new Intent(this, MainActivity7.class);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void changeValue(View view) {
+        for (int i = 0; i < 20; i++) {
+            organs2[i] = "";
+            if (i == 4){
+                organs2[i] = "HEY";
+            }
+        }
+
+        adp1 = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, organs2);
+        lv.setAdapter(adp1);
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity6">
+    tools:context=".MainActivity8">
 
     <Space
         android:layout_width="0dp"
@@ -26,7 +26,7 @@
             android:id="@+id/taken"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="40"
+            android:layout_weight="50"
             app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal_background" />
 
         <Space
@@ -35,23 +35,12 @@
             android:layout_weight="10" />
 
         <Button
+            android:id="@+id/btnCam"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
-            android:text="upload" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10" />
-
-        <Button
-            android:id="@+id/camera_button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="20"
             android:onClick="takePhoto"
-            android:text="to shoot" />
+            android:text="Button" />
 
         <Space
             android:layout_width="match_parent"
@@ -63,5 +52,4 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="10" />
-
 </LinearLayout>

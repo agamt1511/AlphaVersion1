@@ -9,10 +9,10 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,12 +20,11 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -35,65 +34,36 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity7 extends AppCompatActivity {
-    int SELECT_PICTURE = 200;
-    String name;
-
-    Uri selectedImageUri;
-
+public class MainActivity8 extends AppCompatActivity {
     Intent si;
+    String currentPhotoPath;
     int CAMERA_PERM_CODE, CAMERA_REQUEST_CODE;
-
-    ImageView imageView;
-    Button camera_button;
-
+    boolean photoMade;
+    ImageView iv;
+    Uri photoURI;
+    File f;
     FirebaseStorage storage;
-    StorageReference storageReference, ref, copyref;
-
-    boolean flag = false;
-
+    StorageReference storageReference, ref;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main7);
+        setContentView(R.layout.activity_main8);
 
         CAMERA_PERM_CODE = 101;
         CAMERA_REQUEST_CODE = 102;
-
-        camera_button = (Button) findViewById(R.id.camera_button);
-        imageView = (ImageView) findViewById(R.id.taken);
-
-        // handle the Choose Image button to trigger the image chooser function
-        camera_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askCameraPermissions();
-            }
-        });
+        iv = (ImageView) findViewById(R.id.taken);
 
         // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-    }
 
-    private void imageChooser() {
-        Intent i = new Intent();
-        i.setType("image/jpeg");
-        i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        startActivity(Intent.createChooser(i, "Select Picture"));
-
+        photoMade = true;
 
     }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if ((resultCode == RESULT_OK) && (requestCode == SELECT_PICTURE) && (null != data)) {
-            selectedImageUri = data.getData();
-            uploadImage();
-            loadFile();
-        }
+    public void takePhoto(View view){
+        askCameraPermissions();
     }
 
     private void askCameraPermissions() {
@@ -102,7 +72,7 @@ public class MainActivity7 extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
         }
         else{
-            imageChooser();
+            dispatchTakePictureIntent();
         }
     }
 
@@ -110,55 +80,80 @@ public class MainActivity7 extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            imageChooser();
+            dispatchTakePictureIntent();
         } else {
             Toast.makeText(this, "Camera Permission is required to use the camera!", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void dispatchTakePictureIntent(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null){
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex){
+                //Error occurred while creating the File
+
+            }
+            if (photoFile!= null){
+                photoURI = FileProvider.getUriForFile(this,
+                        "com.example.alphaversion1.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+                photoMade = true;
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException{
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd__HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFL = File.createTempFile(
+                imageFileName, /* prefix */
+                " .jpg",       /* suffix */
+                storageDir     /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = imageFL.getAbsolutePath();
+        return imageFL;
+    }
+
+    public String getFileExtension(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST_CODE)
+        {
+            if(resultCode == Activity.RESULT_OK){
+
+                f = new File(currentPhotoPath);
+                iv.setImageURI(Uri.fromFile(f));
+                uploadImage();
+            }
+        }
+    }
+
     void uploadImage() {
-        if (selectedImageUri != null) {
+        if (Uri.fromFile(f) != null) {
             // Defining the child of storageReference
-            name = "images/albert.jpg";
+            name = "images/albert234.jpg";
             ref = storageReference.child(name);
-
-            ref.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    flag = true;
-                }
-            });
+            ref.putFile(Uri.fromFile(f));
         }
     }
-
-    private void loadFile(){
-        try {
-            copyref = storageReference.child(name);
-            File local_file = File.createTempFile("tempFile",".jpg");
-            copyref.getFile(local_file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(local_file.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -192,4 +187,5 @@ public class MainActivity7 extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

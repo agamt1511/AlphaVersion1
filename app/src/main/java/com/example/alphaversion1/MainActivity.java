@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
+    //הגדרת משתנים
     String addEmail, addPassword;
 
     Intent si;
@@ -32,23 +33,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //קריאה לFIREBASE Authentication
         mAuth = FirebaseAuth.getInstance();
 
+        //שיוך משתנים למזהים בXML
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
     }
 
+    //פעולה: הרשמה לFIREBASE Authentication
     public void register(View view) {
+        //קליטת הטקסט והפיכתו למשתנה מסוג String
         addEmail = email.getText().toString().trim();
         addPassword = password.getText().toString().trim();
 
-        mAuth.createUserWithEmailAndPassword(addEmail,addPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        //יצירת חשבון חדש על ידי העברת כתובת הדוא"ל והסיסמה של המשתמש החדש
+        mAuth.createUserWithEmailAndPassword(addEmail,addPassword)
+                //יצירת מאזין - אם הושלם יצירת משתמש חדש במחלקה User
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    // הוספת רשומה חדשה לבסיס הנתונים
                     User user = new User(addEmail,addPassword);
-
                     FirebaseDatabase.getInstance().getReference("User")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user);
@@ -57,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    //יצירת תפריט הקשר
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -70,20 +79,20 @@ public class MainActivity extends AppCompatActivity {
             si = new Intent(this, MainActivity2.class);
             startActivity(si);
         }
-        if (id==R.id.activity3){
+        else if (id==R.id.activity3){
             si = new Intent(this, MainActivity3.class);
             startActivity(si);
         }
-        if (id==R.id.activity4){
+        else if (id==R.id.activity4){
             si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
-        if (id==R.id.activity5){
+        else if (id==R.id.activity5){
             si = new Intent(this, MainActivity5.class);
             startActivity(si);
         }
-        if (id==R.id.activity6){
-            si = new Intent(this, MainActivity7.class);
+        else if (id == R.id.activity8) {
+            si = new Intent(this, MainActivity8.class);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);

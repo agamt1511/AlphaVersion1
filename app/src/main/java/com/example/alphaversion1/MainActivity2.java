@@ -48,10 +48,6 @@ public class MainActivity2 extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageReference, ref, copyref;
 
-    boolean flag = false;
-
-    private ArrayList<String> urlList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +91,7 @@ public class MainActivity2 extends AppCompatActivity {
             // Defining the child of storageReference
             name = "images/albert.jpg";
             ref = storageReference.child(name);
-
-            ref.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    flag = true;
-                }
-            });
+            ref.putFile(selectedImageUri);
         }
     }
 
@@ -147,8 +137,8 @@ public class MainActivity2 extends AppCompatActivity {
             si = new Intent(this, MainActivity5.class);
             startActivity(si);
         }
-        if (id==R.id.activity6){
-            si = new Intent(this, MainActivity7.class);
+        if (id == R.id.activity8) {
+            si = new Intent(this, MainActivity8.class);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);

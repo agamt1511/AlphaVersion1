@@ -24,7 +24,6 @@ import java.util.List;
 
 public class MainActivity5 extends AppCompatActivity {
     String[] organs = new String[20];
-    String[] organs2 = new String[20];
 
     Intent si;
     ArrayAdapter<String> adp;
@@ -70,8 +69,8 @@ public class MainActivity5 extends AppCompatActivity {
             si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
-        if (id == R.id.activity6) {
-            si = new Intent(this, MainActivity7.class);
+        if (id == R.id.activity8) {
+            si = new Intent(this, MainActivity8.class);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);

@@ -1,41 +1,30 @@
 package com.example.alphaversion1;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
+
+//***להוסיף הרשאות בManifest
+//מסך - העלאה והורדה של תמונה מגלריה
 public class MainActivity2 extends AppCompatActivity {
+    //הגדרת משתנים
     int SELECT_PICTURE = 200;
+
     String name;
 
     Uri selectedImageUri;
@@ -46,17 +35,18 @@ public class MainActivity2 extends AppCompatActivity {
     ImageView image_gallery;
 
     FirebaseStorage storage;
-    StorageReference storageReference, ref, copyref;
+    StorageReference storageReference, ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        //שיוך משתנים למזהים בXML
         btn_gallery = (Button) findViewById(R.id.btn_gallery);
         image_gallery = (ImageView) findViewById(R.id.image_gallery);
 
-        // handle the Choose Image button to trigger the image chooser function
+        //יצירת מאזין ל-btn_gallery
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,11 +54,15 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-        // get the Firebase  storage reference
+        //קריאה לFIREBASE Storage
         storage = FirebaseStorage.getInstance();
+
+        //קבלת הפנייה לממסד נתונים
         storageReference = storage.getReference();
     }
 
+
+    //פעולה: פתיחת מצלמה ובחירת תמונה
     private void imageChooser() {
         Intent i = new Intent();
         i.setType("image/*");
@@ -77,29 +71,35 @@ public class MainActivity2 extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
     }
 
+    //onActivityResult: של התמונה URI קבלת כתובת
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((resultCode == RESULT_OK) && (requestCode == SELECT_PICTURE) && (null != data)) {
+        if ((requestCode == SELECT_PICTURE) && (resultCode == RESULT_OK) && (null != data)) {
             selectedImageUri = data.getData();
             uploadImage();
             loadFile();
         }
     }
 
+    //פעולה: העלאת קובץ מהאפליקציה לStorage
     void uploadImage() {
         if (selectedImageUri != null) {
-            // Defining the child of storageReference
+            /* images - שם ההפניה שבתוכה שמים את את התמונה
+               albert - שם הקובץ
+               jpg - סוג הקובץ בו נשמרת התמונה*/
             name = "images/albert.jpg";
-            ref = storageReference.child(name);
-            ref.putFile(selectedImageUri);
+            ref = storageReference.child(name); //הפנייה למיקום הילד
+            ref.putFile(selectedImageUri); //העלאת הקובץ למיקום הרצוי
         }
     }
 
+    //פעולה: הורדת קובץ מהStorage ושימוש באפליקציה
     private void loadFile(){
         try {
-            copyref = storageReference.child(name);
+            /* ההפניה למיקום הקובץ שבו רוצים להשתמש - ref
+            local_file - יצירת קובץ תבנית לאחסון התמונה */
             File local_file = File.createTempFile("tempFile",".jpg");
-            copyref.getFile(local_file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            ref.getFile(local_file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     Bitmap bitmap = BitmapFactory.decodeFile(local_file.getAbsolutePath());
@@ -112,6 +112,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
 
+    //תפריט הקשר
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -125,19 +126,19 @@ public class MainActivity2 extends AppCompatActivity {
             si = new Intent(this, MainActivity.class);
             startActivity(si);
         }
-        if (id==R.id.activity3){
+        else if (id==R.id.activity3){
             si = new Intent(this, MainActivity3.class);
             startActivity(si);
         }
-        if (id==R.id.activity4){
+        else if (id==R.id.activity4){
             si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
-        if (id==R.id.activity5){
+        else if (id==R.id.activity5){
             si = new Intent(this, MainActivity5.class);
             startActivity(si);
         }
-        if (id == R.id.activity8) {
+        else if (id == R.id.activity8) {
             si = new Intent(this, MainActivity8.class);
             startActivity(si);
         }

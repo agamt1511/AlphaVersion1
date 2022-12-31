@@ -38,10 +38,6 @@ public class MainActivity3 extends AppCompatActivity {
     Intent si;
     String st1;
     Button notifyNo_btn, notifyYes_btn;
-    MaterialTimePicker picker;
-    boolean timePicked;
-    AlarmManager alarmManager;
-    Calendar calendar;
 
 
     @Override
@@ -137,19 +133,19 @@ public class MainActivity3 extends AppCompatActivity {
             si = new Intent(this, MainActivity.class);
             startActivity(si);
         }
-        if (id==R.id.activity2){
+        else if (id==R.id.activity2){
             si = new Intent(this, MainActivity2.class);
             startActivity(si);
         }
-        if (id==R.id.activity4){
+        else if (id==R.id.activity4){
             si = new Intent(this, MainActivity4.class);
             startActivity(si);
         }
-        if (id==R.id.activity5){
+        else if (id==R.id.activity5){
             si = new Intent(this, MainActivity5.class);
             startActivity(si);
         }
-        if (id == R.id.activity8) {
+        else if (id == R.id.activity8) {
             si = new Intent(this, MainActivity8.class);
             startActivity(si);
         }

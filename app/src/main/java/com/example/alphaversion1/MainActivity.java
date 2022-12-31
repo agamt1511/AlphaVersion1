@@ -1,24 +1,15 @@
 package com.example.alphaversion1;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
-
+//מסך - הרשמה
 public class MainActivity extends AppCompatActivity {
     //הגדרת משתנים
     String addEmail, addPassword;
@@ -33,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //קריאה לFIREBASE Authentication
         mAuth = FirebaseAuth.getInstance();
 
@@ -43,29 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
     //פעולה: הרשמה לFIREBASE Authentication
     public void register(View view) {
-        //קליטת הטקסט והפיכתו למשתנה מסוג String
+        //קליטת הטקסט והפיכתו למשתנה מסוג String (ללא רווחים מסוף ומתחילת המחרוזת)
         addEmail = email.getText().toString().trim();
         addPassword = password.getText().toString().trim();
 
         //יצירת חשבון חדש על ידי העברת כתובת הדוא"ל והסיסמה של המשתמש החדש
-        mAuth.createUserWithEmailAndPassword(addEmail,addPassword)
-                //יצירת מאזין - אם הושלם יצירת משתמש חדש במחלקה User
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    // הוספת רשומה חדשה לבסיס הנתונים
-                    User user = new User(addEmail,addPassword);
-                    FirebaseDatabase.getInstance().getReference("User")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .setValue(user);
-                }
-            }
-        });
+        mAuth.createUserWithEmailAndPassword(addEmail,addPassword);
     }
 
 
-    //יצירת תפריט הקשר
+    // תפריט הקשר
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

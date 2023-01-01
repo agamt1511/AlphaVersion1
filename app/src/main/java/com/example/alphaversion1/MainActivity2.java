@@ -85,9 +85,9 @@ public class MainActivity2 extends AppCompatActivity {
     void uploadImage() {
         if (selectedImageUri != null) {
             /* images - שם ההפניה שבתוכה שמים את את התמונה
-               albert - שם הקובץ
+               albert - שם הקובץ - בגלל שהשם אותו דבר מציג את התמונה הקודמת ורק אז הופך לתמונה חדשה
                jpg - סוג הקובץ בו נשמרת התמונה*/
-            name = "images/albert.jpg";
+            name = "images/43ad-999563-3f650f37d42c888.jpg";
             ref = storageReference.child(name); //הפנייה למיקום הילד
             ref.putFile(selectedImageUri); //העלאת הקובץ למיקום הרצוי
         }
@@ -96,8 +96,8 @@ public class MainActivity2 extends AppCompatActivity {
     //פעולה: הורדת קובץ מהStorage ושימוש באפליקציה
     private void loadFile(){
         try {
-            /* ההפניה למיקום הקובץ שבו רוצים להשתמש - ref
-            local_file - יצירת קובץ תבנית לאחסון התמונה */
+        /* ההפניה למיקום הקובץ שבו רוצים להשתמש - ref
+        local_file - יצירת קובץ תבנית לאחסון התמונה */
             File local_file = File.createTempFile("tempFile",".jpg");
             ref.getFile(local_file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -110,6 +110,7 @@ public class MainActivity2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 
 
     //תפריט הקשר

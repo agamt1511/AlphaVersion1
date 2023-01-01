@@ -3,8 +3,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
-import android.content.BroadcastReceiver;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.AlarmManager;
@@ -16,39 +14,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
-import com.google.android.material.timepicker.MaterialTimePicker;
-import com.google.android.material.timepicker.TimeFormat;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
 
-
+//מסך - יצירת התראה
 public class MainActivity3 extends AppCompatActivity {
-    EditText et1;
-    PendingIntent pendingIntent;
-    Intent si;
+    //הגדרת משתנים
     String st1;
-    Button notifyNo_btn, notifyYes_btn;
 
+    Intent si;
+
+    EditText et1;
+
+    Button notifyNo_btn, notifyYes_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
 
+        //שיוך משתנים למזהים בXML
         et1 = (EditText) findViewById(R.id.et1);
         notifyNo_btn = (Button) findViewById(R.id.notifyNo_btn);
         notifyYes_btn = (Button) findViewById(R.id.notifyYes_btn);
 
+        //יצירת מאזין ל-notifyNo_btn
         notifyNo_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,10 +50,13 @@ public class MainActivity3 extends AppCompatActivity {
         });
     }
 
+    //פעולה: יצירת התראה ללא טיימר
     public void CreateNotify_NoTimer() {
         st1 = et1.getText().toString();
+        //יצירת ערוץ
         createNotificationChannel();
 
+        //תוכן ההתראה
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CHANNEL_ID")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Notify_NoTimer")
@@ -69,20 +65,21 @@ public class MainActivity3 extends AppCompatActivity {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity3.this);
 
-        // notificationId is a unique int for each notification that you must define
+        //יצירת int ייחודי עבור כל התראה
         notificationManager.notify(100, builder.build());
 
     }
 
+    //פעולה: יצירת בוחר זמן
     public void openTimePicker(View view) {
-        // instance of our calendar.
+        //דוגמה של לוח השנה משלנו
         final Calendar c = Calendar.getInstance();
 
-        // getting our hour, minute.
+        //מקבל את השעה והדקות שלנו
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
-        // initializing our Time Picker Dialog
+        //Time Picker Dialog-אתחול ומאזין של ה
         TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity3.this,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -98,28 +95,26 @@ public class MainActivity3 extends AppCompatActivity {
                         alarmMgr.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), pendingIntent);
                     }
                 }, hour, minute, true);
-        // display our time picker dialog.
+        //הצגת ה-Time Picker Dialog
         timePickerDialog.show();
     }
 
-
-
+    //פעולה: יצירת ערוץ התראות
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+        //יצירת NotificationChannel, אבל רק עבור API +26 אחרת ה-class לא תעבוד
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //הגדרת קבוע מזהה לערוץ, שם לערוץ ורמת חשיבות לערוץ
             CharSequence name = "Channel";
-            String description = "Channel 1 try";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
+            //רשימת הערוץ במערכת. לאחר מכאן אי אפשר לשנות רמת חשיבות או תכונות אחרות של הערוץ
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
 
+
+    //תפריט הקשר
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
